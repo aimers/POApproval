@@ -1,0 +1,4 @@
+<mvc:View busy="{appProperties>/busy}" controllerName="nw.epm.refapps.ext.po.apv.controller.App" displayBlock="true"
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<SplitApp id="fioriContent"/>
+</mvc:View>

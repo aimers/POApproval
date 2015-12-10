@@ -1,0 +1,4 @@
+<mvc:View controllerName="nw.epm.refapps.ext.po.apv.controller.BaseController" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<MessagePage description="" icon="sap-icon://document" id="messagePage" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
+		text="{appProperties>/emptyPageText}" title=""></MessagePage>
+</mvc:View>

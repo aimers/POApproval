@@ -1,0 +1,52 @@
+<mvc:View controllerName="nw.epm.refapps.ext.po.apv.controller.S2_PurchaseOrders" id="masterView" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<Page id="masterPage" navButtonPress="onNavBack" showNavButton="true"
+		title="{path:'viewProperties>/masterListCount', formatter: '.formatter.masterTitle' }">
+		<headerContent>
+			<Button icon="{= ${viewProperties>/isMultiSelect} ? 'sap-icon://sys-cancel' : 'sap-icon://multi-select'}" id="multiselectButton"
+				press="onMultiSelectPressed" visible="false"/>
+		</headerContent>
+		<subHeader>
+			<Bar id="subHeaderBar">
+				<contentMiddle>
+					<SearchField id="searchField" search="onSearch" showRefreshButton="{= !${device>/support/touch}}" width="100%"/>
+				</contentMiddle>
+			</Bar>
+		</subHeader>
+		<content>
+			<!-- On non desktop devices the user triggers the list refresh by pulling down the list (pull to refresh) -->
+			<PullToRefresh id="pullToRefresh" refresh="onPullToRefresh" visible="{= ${device>/support/touch} &amp;&amp; !${appProperties>/busy}}"/>
+			<!--List of purchase orders that need to be approved. The list entries contain the information supplier name, total value, requester, change date and number of items-->
+			<!-- Note that the select defined for the list items ensures, that all attributes that are required on S3 view are loaded already here -->
+			<List id="masterList" includeItemInSelection="true"
+				items="{path: '/WorkflowTaskCollection', sorter: [{path: 'WiCreatedAt', descending: true}, {path: 'PoNumber', descending: false}]}"
+				mode="{= ${viewProperties>/isMultiSelect} ? 'MultiSelect' : (${device>/system/phone} ? 'None' : 'SingleSelectMaster')}"
+				modeAnimationOn="false" noDataText="{i18n>ymsg.noDataTextMaster}" selectionChange="onItemSelect" swipe="onSwipe"
+				updateFinished="onUpdateFinished">
+				<items>
+					<ObjectListItem id="masterListItem"
+						number="{path: 'Value', formatter: '.formatter.amountWithOutCurrency'}" numberUnit="{Currency}" press="onItemSelect"
+						title="{SupplierName}" type="{= ${device>/system/phone} ? 'Active' : 'Inactive'}">
+						<secondStatus>
+							<ObjectStatus id="CreatedAt" text="{path: 'WiCreatedAt', formatter: '.formatter.daysAgo'}"/>
+						</secondStatus>
+						<attributes>
+							<ObjectAttribute id="createdByName" text="{path: 'CreatedByName'}"/>
+							<ObjectAttribute id="itemCountStatus" text="{path: 'ItemDescriptions'}"/>
+						</attributes>
+					</ObjectListItem>
+				</items>
+				<swipeContent>
+					<Button id="swipeApproveButton" press="onSwipeApprove" text="{i18n>xbut.approve}" type="Accept"/>
+				</swipeContent>
+			</List>
+		</content>
+		<!--Footer bar shows "Process" button on the phone which allows to navigate to the summary view -->
+		<footer>
+			<OverflowToolbar id="footerToolbar">
+				<ToolbarSpacer id="footerToolbarSpacer"/>
+				<Button enabled="{= ${appProperties>/selectedPurchaseOrders}.length > 0}" id="processButton" press="onProcessPressed"
+					text="{i18n>xbut.process}" type="Emphasized" visible="{= ${viewProperties>/isMultiSelect} &amp;&amp; ${device>/system/phone}}"/>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>
