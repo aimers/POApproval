@@ -14,7 +14,7 @@ sap.ui.define([
 		init: function() {
 			var oUriParameters = jQuery.sap.getUriParameters(),
 				oMockServer = new MockServer({
-					rootUri: "/sap/opu/odata/sap/EPM_REF_APPS_PO_APV_SRV/"
+					rootUri: "https://www.sapfioritrial.com/sap/opu/odata/SAP/GBAPP_POAPPROVAL;mo/"
 				}),
 				oRequests = new MockRequests(),
 				sPath = jQuery.sap.getModulePath("nw.epm.refapps.ext.po.apv.localService"),
@@ -23,18 +23,22 @@ sap.ui.define([
 			// configure mock server with a delay of 1s
 			MockServer.config({
 				autoRespond: true,
-				autoRespondAfter: (oUriParameters.get("serverDelay") || 0)
+				//autoRespondAfter: (oUriParameters.get("serverDelay") || 0)
+				autoRespondAfter: 1000
 			});
 
 			// load local mock data
-			oMockServer.simulate(sPath + "/metadata.xml", {
-				sMockdataBaseUrl: sPath + "/mockdata"
-			});
-			aRequests = oMockServer.getRequests();
-			oMockServer.setRequests(aRequests.concat(oRequests.getRequests()));
+//			oMockServer.simulate(sPath + "/metadata.xml", {
+//				sMockdataBaseUrl: sPath + "/mockdata"
+//			});
+			
+	  oMockServer.simulate(sPath + "/metadata.xml");
+			
+			//aRequests = oMockServer.getRequests();
+			//oMockServer.setRequests(aRequests.concat(oRequests.getRequests()));
 			oMockServer.start();
 
-			jQuery.sap.log.info("Running the app with mock data");
+			alert("Running the app with mock data");
 		}
 	};
 });
